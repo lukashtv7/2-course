@@ -1,0 +1,24 @@
+sock = socket.socket() - отвечает за включение 
+sock.bind(('', 80)) - подключаем наш сервер к определенному порту (80) 
+
+except OSError: - если получили ошибку, то подключаемся 8080
+    sock.bind(('', 8080))
+
+
+sock.listen(5)  - сервер слушает входящие подключения
+conn, addr = sock.accept() - принимает адрес и данные соединения
+
+data = conn.recv(8192) - получает данные , который отправил клиент 
+msg = data.decode() - декодирует эти данные в читаемый вид
+
+
+file = open("index.html",'rb') # open file , r => read , b => byte format   --- открывает файл index.html и переводит весь текст в формат байтов
+response = file.read() - читает файл и записывает это в переменную
+file.close() - закрывает файл
+header = 'HTTP/1.1 200 OK\n' - добавляем header (опционально)
+header += 'Content-Type: '+str('text/html')+'\n\n' - берем текст из файла 
+final_response = header.encode('utf-8') - кодируем сообщение из 19 строчки в формат utf-8
+final_response += response - записываем данные из index.html в наш ответ
+conn.send(final_response) отправляем ответ
+conn.close() - закрываем соединение 
+
